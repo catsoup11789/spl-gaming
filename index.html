@@ -14,36 +14,36 @@
 </head>
 <body>
 <div class="container-fluid">
-<form name="gaming-sign-in" autocomplete="off">
+<form name="submit-to-google-sheet" autocomplete="off">
     <h1 class="display-4"><img src="square-logo.png" height="120">Gaming Sign In</h1>
     <p class="lead">Complete this form for access to a gaming system.</p>
     <div class="alert alert-warning">All patrons 10 years and younger must have a guardian with them.</div>
 
 <div class="form-row">
     <div class="form-group col-md-4">
-      <label for="First Name">First Name <span class="badge badge-danger">Required</span></label>
-      <input id="FirstName" type="text" class="form-control form-control-lg" required>
+      <label>First Name</label>
+      <input name="FirstName" type="text">
     </div>
     <div class="form-group col-md-4">
-      <label for="Last Name">Last Name <span class="badge badge-danger">Required</span></label>
-      <input type="text" class="form-control form-control-lg" id="LastName" required>
+      <label>Last Name</label>
+      <input type="text" name="LastName">
     </div>
         <div class="form-group col-md-4">
-      <label for="patronAge">Age <span class="badge badge-danger">Required</span></label>
-      <select class="form-control form-control-lg" id="Age" required>
+      <label>Age</label>
+      <select name="Age">
         <option selected disabled>Choose...</option>
         <option value="6">6</option>
-        <option value="6">7</option>
-        <option value="6">8</option>
-        <option value="6">9</option>
-        <option value="6">10</option>
-        <option value="6">11</option>
-        <option value="6">12</option>
-        <option value="6">13</option>
-        <option value="6">14</option>
-        <option value="6">15</option>
-        <option value="6">16</option>
-        <option value="6">17</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
         <option value="18+">18+</option>
       </select>
             
@@ -51,15 +51,15 @@
   </div>
   <div class="form-row">
     <div class="form-group col-md-12">
-      <label for="libraryCard">Library Card Number</label>
-      <input type="text" class="form-control form-control-lg" id="LibraryCard">
+      <label>Library Card Number</label>
+      <input type="text" name="LibraryCard">
       <small id="libraryCardHelp" class="form-text text-muted">Scan your library card. If you do not have a card, leave this blank. You will need to provide a current photo ID to the help desk.</small>
     </div>
   </div>
 <div class="form-row">
     <div class="form-group col-md-6">
-      <label for="gamingSystem">Gaming System <span class="badge badge-danger">Required</span></label>
-      <select class="form-control form-control-lg" id="GameSystem" required>
+      <label>Gaming System</label>
+      <select name="GameSystem">
         <option selected disabled>Choose...</option>
         <option value="PS4">PS4</option>
         <option value="PS4 VR">PS4 VR</option>
@@ -68,8 +68,8 @@
       </select>
     </div>
     <div class="form-group col-md-6">
-      <label for="gamingDisc">Game Disc <span class="badge badge-danger">Required</span></label>
-      <select class="form-control form-control-lg" name="Disc" required>
+      <label>Game Disc</label>
+      <select name="Disc">
         <option selected disabled>Choose...</option>
         <option value="Nope">Nope</option>
         <option value="PS4-COD: Black Ops II">PS4-COD: Black Ops II</option>
@@ -85,42 +85,22 @@
     </div>
   
 
-  <input type="button" value="Submit" class="btn btn-primary form-control-lg" onclick="submitForm()"/>
+  <button type="submit">Submit</button>
     
 </form>
     </div>
-<!--<script>
-  const scriptURL = 'https://api.codetabs.com/v1/proxy?quest=script.google.com/macros/s/AKfycbxYlF4RDJi7QizivPKUPEWCJquc_zOsH1z2irpNJXJxgwtJ7y7t/exec'
-  const form = document.forms['gaming-sign-in']
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxYlF4RDJi7QizivPKUPEWCJquc_zOsH1z2irpNJXJxgwtJ7y7t/exec'
+  const form = document.forms['submit-to-google-sheet']
 
   form.addEventListener('submit', e => {
     e.preventDefault()
-    fetch(scriptURL, { mode: "no-cors", method: 'POST', body: new FormData(form)})
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
       .then(response => console.log('Bananas!', response), form.reset())
       .catch(error => console.error('Error!', error.message))
   })
     
 
-</script>-->
-     <script>
-      function submitForm() {
-        try {
-          var data = [];
-          data.push(document.getElementById("FirstName").value);
-          data.push(document.getElementById("LastName").value);
-          data.push(document.getElementById("Age").value);
-          data.push(document.getElementById("LibraryCard").value);
-          data.push(document.getElementById("GameSystem").value);
-          data.push(document.getElementById("Disc").value);
-          google.script.run.withSuccessHandler(success).submitData(data);
-        }
-        catch(err) {
-          alert(err);
-        }
-      }
-      function success(msg) {
-        alert(msg);
-      }
-    </script>
+</script>
 </body>
 </html>
