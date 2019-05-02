@@ -10,7 +10,11 @@
     <script src="https://wzrd.in/standalone/formdata-polyfill@latest"></script>
     <script src="https://wzrd.in/standalone/promise-polyfill@latest"></script>
     <script src="https://wzrd.in/standalone/whatwg-fetch@latest"></script>
-   
+    <style>
+        .games {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -65,28 +69,58 @@
 <div class="form-row">
     <div class="form-group col-md-6">
       <label>Gaming System</label>
-      <select name="GameSystem" class="form-control form-control-lg">
+      <select name="GameSystem" class="form-control form-control-lg" id="GamesSelector">
         <option selected disabled>Choose...</option>
         <option value="PS4">PS4</option>
-        <option value="PS4 VR">PS4 VR</option>
-        <option value="Nintendo Switch">Nintendo Switch</option>
+        <option value="PS4-VR">PS4 VR</option>
+        <option value="Nintendo-Switch">Nintendo Switch</option>
         <option value="Wii">Wii</option>
       </select>
     </div>
     <div class="form-group col-md-6">
-      <label>Game Disc</label>
+      
+      <div id="PS4" class="games PS4">
+        <label>Game Disc</label>
       <select name="Disc" class="form-control form-control-lg">
         <option selected disabled>Choose...</option>
-        <option value="Nope">Nope</option>
-        <option value="PS4-COD: Black Ops II">PS4-COD: Black Ops II</option>
-        <option value="PS4-COD: WWII">PS4-COD: WWII</option>
-        <option value="PS4-Hasbro Fun Pack">PS4-Hasbro Fun Pack</option>
-        <option value="PS4-Jackbox">PS4-Jackbox</option>
-        <option value="PS4-Madden NFL 1">PS4-Madden NFL 16</option>
-        <option value="PS4-Minecraft">PS4-Minecraft</option>
-        <option value="PS4-MLB 16">PS4-MLB 16</option>
-        <option value="PS4-Mortal Kombat XL">PS4-Mortal Kombat XL</option>
+        <option value="None">- None</option>
+        <option value="PS4-Need for Speed">Need for Speed</option>
+        <option value="PS4-COD: Black Ops II">COD: Black Ops II</option>
+        <option value="PS4-COD: WWII">COD: WWII</option>
+        <option value="PS4-Hasbro Fun Pack">Hasbro Fun Pack</option>
+        <option value="PS4-Jackbox">Jackbox</option>
+        <option value="PS4-Madden NFL 1">Madden NFL 16</option>
+        <option value="PS4-Minecraft">Minecraft</option>
+        <option value="PS4-MLB 16">MLB 16</option>
+        <option value="PS4-Mortal Kombat XL">Mortal Kombat XL</option>
       </select>
+      </div>
+      <div id="PS4-VR" class="games PS4-VR">
+          <label>Game Disc</label>
+      <select name="Disc" class="form-control form-control-lg">
+        <option selected disabled>Choose...</option>
+        <option value="None">- None</option>
+        <option value="PS4 VR-Batman Arkham">Batman Arkham</option>
+        <option value="PS4 VR-Battlezone">Battlezone</option>
+        <option value="PS4 VR-Job Simulator">Job Simulator</option>
+        <option value="PS4 VR-Moss">Moss</option>
+        <option value="PS4 VR-RIGS">RIGS</option>
+      </select>
+      </div>
+      <div id="Nintendo-Switch" class="games Nintendo-Switch">
+          <label>Game Disc</label>
+            <select name="Disc" class="form-control form-control-lg">
+        <option value="None">None</option>
+          </select>
+      </div>
+      <div id="Wii" class="games Wii">
+          <label>Game Disc</label>
+      <select name="Disc" class="form-control form-control-lg">
+        <option selected disabled>Choose...</option>
+        <option value="Nope">- None</option>
+        <option value="Wii-Mario Party 9">Mario Party 9</option>
+      </select>
+      </div>
     </div>
     </div>
   
@@ -95,7 +129,18 @@
     
 </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
 <script>
+    
+    $(function() {
+  $('#GamesSelector').change(function(){
+    $('.games').hide();
+    $('#' + $(this).val()).show();
+  });
+});
+    
+    
   const scriptURL = 'https://script.google.com/macros/s/AKfycbxYlF4RDJi7QizivPKUPEWCJquc_zOsH1z2irpNJXJxgwtJ7y7t/exec'
   const form = document.forms['submit-to-google-sheet']
 
