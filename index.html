@@ -14,13 +14,15 @@
         .games {
             display: none;
         }
+        .is-hidden {
+            display: none;
+        }
     </style>
 </head>
-<body>
+<body class="body">
 <div class="container-fluid">
 <form name="submit-to-google-sheet" autocomplete="off">
-    <!-- Send blank values for the other columns in spreadsheet.
-         Prevents it from sending 'undefined' value -->
+    <!-- Send blank values for the other columns in spreadsheet so it doesn't send undefined -->
     <input type="hidden" name="Initials" value="">
     <input type="hidden" name="System" value="">
     <input type="hidden" name="TimeIn" value="">
@@ -37,13 +39,13 @@
     <!-- Column for First Name -->
     <div class="form-group col-md-4">
         <label>First Name</label>
-        <input name="FirstName" type="text" class="form-control form-control-lg">
+        <input name="FirstName" type="text" class="form-control form-control-lg" required>
     </div>
     
     <!-- Column for Last Name -->
     <div class="form-group col-md-4">
         <label>Last Name</label>
-        <input type="text" name="LastName" class="form-control form-control-lg">
+        <input type="text" name="LastName" class="form-control form-control-lg" required>
     </div>
     
     <!-- Column for Age -->
@@ -97,7 +99,7 @@
     <!-- Drop down for PS4 games -->
       <div id="PS4" class="games PS4">
         <label>Game Disc</label>
-        <select name="Disc" class="form-control form-control-lg">
+        <select name="Disc" class="form-control form-control-lg" required>
             <option selected disabled>Choose...</option>
             <option value="None">None</option>
             <option value="PS4-Need for Speed">Need for Speed</option>
@@ -120,7 +122,7 @@
       <div id="PS4-VR" class="games PS4-VR">
         <label>Game Disc</label>
         <select name="Disc" class="form-control form-control-lg">
-            <option selected disabled>Choose...</option>
+            <option selected disabled value="None">Choose...</option>
             <option value="None">None</option>
             <option value="PS4 VR-Batman Arkham">Batman Arkham</option>
             <option value="PS4 VR-Battlezone">Battlezone</option>
@@ -157,12 +159,32 @@
     </div><!-- End of column for Game Disc Choice -->
 </div><!-- End of row for Game System and Game Disc Choice -->
   
-  <button type="submit" class="btn btn-primary form-control-lg">Submit</button>
+  <button type="submit" class="btn btn-primary form-control-lg">
+      <span class="spinner-grow spinner-grow-sm is-hidden" role="status" aria-hidden="true"></span>
+      Submit
+    </button>
+
+<!-- Success modal -->
+<div class="modal fade bd-example-modal-sm" id="success-message" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-success">Success!</h4>
+            </div>
+            <div class="modal-body">
+                <p>Thank you, please visit the Help Desk.</p>
+            </div>
+        </div>
+    </div>
+</div>
 </form>
+    
 </div><!-- End of container -->
     
-    
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 <!-- Script for sending data to Google Spreadsheet -->
 <script>
@@ -175,13 +197,33 @@
     
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxYlF4RDJi7QizivPKUPEWCJquc_zOsH1z2irpNJXJxgwtJ7y7t/exec'
     const form = document.forms['submit-to-google-sheet']
+    const loading = document.querySelector('.spinner-grow')
+    const success = document.querySelector('#success-message')
+    const body = document.querySelector('.body')
 
     form.addEventListener('submit', e => {
         e.preventDefault()
+        showLoadingIndicator()
         fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-            .then(response => console.log('Bananas!', response), form.reset())
+            .then(response => showSuccessMessage(response))
             .catch(error => console.error('Error!', error.message))
     })
+    
+    function showLoadingIndicator() {
+        loading.classList.remove('is-hidden')
+    }
+    
+    function showSuccessMessage(response) {
+        console.log('Success!', response);
+        setTimeout(() => {
+            loading.classList.add('is-hidden')
+            $('#success-message').modal('show')
+            setTimeout(() => {
+                $('#success-message').modal('hide')
+                form.reset()
+            }, 3000);
+        }, 1000)
+    }
 </script>
     
 </body>
