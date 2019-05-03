@@ -6,11 +6,11 @@
     <title>Salina Public Library Gaming Sign In</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://unpkg.com/prefixfree@1.0.0/prefixfree.min.js"></script>
-
     <script src="https://wzrd.in/standalone/formdata-polyfill@latest"></script>
     <script src="https://wzrd.in/standalone/promise-polyfill@latest"></script>
     <script src="https://wzrd.in/standalone/whatwg-fetch@latest"></script>
     <style>
+        /** Hide .games until system is selected **/
         .games {
             display: none;
         }
@@ -19,139 +19,170 @@
 <body>
 <div class="container-fluid">
 <form name="submit-to-google-sheet" autocomplete="off">
+    <!-- Send blank values for the other columns in spreadsheet.
+         Prevents it from sending 'undefined' value -->
     <input type="hidden" name="Initials" value="">
     <input type="hidden" name="System" value="">
     <input type="hidden" name="TimeIn" value="">
     <input type="hidden" name="TimeOut" value="">
     <input type="hidden" name="TotalTime" value="">
     <input type="hidden" name="Notes" value="">
+    
     <h1 class="display-4"><img src="square-logo.png" height="120">Gaming Sign In</h1>
     <p class="lead">Complete this form for access to a gaming system.</p>
     <div class="alert alert-warning">All patrons 10 years and younger must have a guardian with them.</div>
 
+<!-- Row for Name and Age -->
 <div class="form-row">
+    <!-- Column for First Name -->
     <div class="form-group col-md-4">
-      <label>First Name</label>
-      <input name="FirstName" type="text" class="form-control form-control-lg">
+        <label>First Name</label>
+        <input name="FirstName" type="text" class="form-control form-control-lg">
     </div>
+    
+    <!-- Column for Last Name -->
     <div class="form-group col-md-4">
-      <label>Last Name</label>
-      <input type="text" name="LastName" class="form-control form-control-lg">
+        <label>Last Name</label>
+        <input type="text" name="LastName" class="form-control form-control-lg">
     </div>
-        <div class="form-group col-md-4">
-      <label>Age</label>
-      <select name="Age" class="form-control form-control-lg">
-        <option selected disabled>Choose...</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-        <option value="14">14</option>
-        <option value="15">15</option>
-        <option value="16">16</option>
-        <option value="17">17</option>
-        <option value="18+">18+</option>
-      </select>
-            
+    
+    <!-- Column for Age -->
+    <div class="form-group col-md-4">
+        <label>Age</label>
+        <select name="Age" class="form-control form-control-lg">
+            <option selected disabled>Choose...</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18+">18+</option>
+        </select> 
     </div>
-  </div>
-  <div class="form-row">
+</div><!-- End of row for Name and Age -->
+    
+<!-- Row for Library Card -->
+<div class="form-row">
     <div class="form-group col-md-12">
       <label>Library Card Number</label>
       <input type="text" name="LibraryCard" class="form-control form-control-lg">
       <small id="libraryCardHelp" class="form-text text-muted">Scan your library card. If you do not have a card, leave this blank. You will need to provide a current photo ID to the help desk.</small>
     </div>
-  </div>
+</div><!-- End of row for Library Card -->
+    
+<!-- Row for Gaming System and Game Disc Choice -->
 <div class="form-row">
+    <!-- Column for Game System - 50% -->
     <div class="form-group col-md-6">
-      <label>Gaming System</label>
-      <select name="GameSystem" class="form-control form-control-lg" id="GamesSelector">
-        <option selected disabled>Choose...</option>
-        <option value="PS4">PS4</option>
-        <option value="PS4-VR">PS4 VR</option>
-        <option value="Nintendo-Switch">Nintendo Switch</option>
-        <option value="Wii">Wii</option>
-      </select>
+        <label>Gaming System</label>
+        <select name="GameSystem" class="form-control form-control-lg" id="GamesSelector">
+            <option selected disabled>Choose...</option>
+            <option value="PS4">PS4</option>
+            <option value="PS4-VR">PS4 VR</option>
+            <option value="Nintendo-Switch">Nintendo Switch</option>
+            <option value="Wii">Wii</option>
+        </select>
     </div>
+    
+    <!-- Column for Game Disc Choice - 50% -->
     <div class="form-group col-md-6">
-      
+        
+    <!-- Drop down for PS4 games -->
       <div id="PS4" class="games PS4">
         <label>Game Disc</label>
-      <select name="Disc" class="form-control form-control-lg">
-        <option selected disabled>Choose...</option>
-        <option value="None">- None</option>
-        <option value="PS4-Need for Speed">Need for Speed</option>
-        <option value="PS4-COD: Black Ops II">COD: Black Ops II</option>
-        <option value="PS4-COD: WWII">COD: WWII</option>
-        <option value="PS4-Hasbro Fun Pack">Hasbro Fun Pack</option>
-        <option value="PS4-Jackbox">Jackbox</option>
-        <option value="PS4-Madden NFL 1">Madden NFL 16</option>
-        <option value="PS4-Minecraft">Minecraft</option>
-        <option value="PS4-MLB 16">MLB 16</option>
-        <option value="PS4-Mortal Kombat XL">Mortal Kombat XL</option>
-      </select>
+        <select name="Disc" class="form-control form-control-lg">
+            <option selected disabled>Choose...</option>
+            <option value="None">None</option>
+            <option value="PS4-Need for Speed">Need for Speed</option>
+            <option value="PS4-COD: Black Ops II">COD: Black Ops II</option>
+            <option value="PS4-COD: WWII">COD: WWII</option>
+            <option value="PS4-Hasbro Fun Pack">Hasbro Fun Pack</option>
+            <option value="PS4-Jackbox">Jackbox</option>
+            <option value="PS4-Madden NFL 1">Madden NFL 16</option>
+            <option value="PS4-Minecraft">Minecraft</option>
+            <option value="PS4-MLB 16">MLB 16</option>
+            <option value="PS4-Mortal Kombat XL">Mortal Kombat XL</option>
+            <option value="PS4-Need for Speed">Need for Speed</option>
+            <option value="PS4-Overcooked!">Overcooked!</option>
+            <option value="PS4-Overwatch">Overwatch</option>
+            <option value="PS4-Pac-Man Collection">Pac-Man Collection</option>
+        </select>
       </div>
+        
+    <!-- Drop down for PS4 VR games -->
       <div id="PS4-VR" class="games PS4-VR">
-          <label>Game Disc</label>
-      <select name="Disc" class="form-control form-control-lg">
-        <option selected disabled>Choose...</option>
-        <option value="None">- None</option>
-        <option value="PS4 VR-Batman Arkham">Batman Arkham</option>
-        <option value="PS4 VR-Battlezone">Battlezone</option>
-        <option value="PS4 VR-Job Simulator">Job Simulator</option>
-        <option value="PS4 VR-Moss">Moss</option>
-        <option value="PS4 VR-RIGS">RIGS</option>
-      </select>
+        <label>Game Disc</label>
+        <select name="Disc" class="form-control form-control-lg">
+            <option selected disabled>Choose...</option>
+            <option value="None">None</option>
+            <option value="PS4 VR-Batman Arkham">Batman Arkham</option>
+            <option value="PS4 VR-Battlezone">Battlezone</option>
+            <option value="PS4 VR-Job Simulator">Job Simulator</option>
+            <option value="PS4 VR-Moss">Moss</option>
+            <option value="PS4 VR-RIGS">RIGS</option>
+            <option value="PS4 VR-Robinson">Robinson</option>
+            <option value="PS4 VR-Superhot">Superhot</option>
+            <option value="PS4 VR-VR Worlds">VR Worlds</option>
+        </select>
       </div>
+        
+    <!-- Drop down for Nintendo Switch games -->
       <div id="Nintendo-Switch" class="games Nintendo-Switch">
-          <label>Game Disc</label>
-            <select name="Disc" class="form-control form-control-lg">
-        <option value="None">None</option>
-          </select>
+        <label>Game Disc</label>
+        <select name="Disc" class="form-control form-control-lg">
+            <option value="None">None</option>
+        </select>
       </div>
+        
+    <!-- Drop down for Wii games -->
       <div id="Wii" class="games Wii">
-          <label>Game Disc</label>
-      <select name="Disc" class="form-control form-control-lg">
-        <option selected disabled>Choose...</option>
-        <option value="Nope">- None</option>
-        <option value="Wii-Mario Party 9">Mario Party 9</option>
-      </select>
+        <label>Game Disc</label>
+        <select name="Disc" class="form-control form-control-lg">
+            <option selected disabled>Choose...</option>
+            <option value="None">None</option>
+            <option value="Wii-Mario Party 9">Mario Party 9</option>
+            <option value="Wii-Sports">Wii Sports</option>
+            <option value="Wii-Sports Resort">Wii Sports Resort</option>
+            <option value="Wii-Super Smash Bros">Super Smash Bros</option>
+        </select>
       </div>
-    </div>
-    </div>
+        
+    </div><!-- End of column for Game Disc Choice -->
+</div><!-- End of row for Game System and Game Disc Choice -->
   
-
   <button type="submit" class="btn btn-primary form-control-lg">Submit</button>
-    
 </form>
-    </div>
+</div><!-- End of container -->
+    
+    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
+<!-- Script for sending data to Google Spreadsheet -->
 <script>
-    
     $(function() {
-  $('#GamesSelector').change(function(){
-    $('.games').hide();
-    $('#' + $(this).val()).show();
-  });
-});
+        $('#GamesSelector').change(function(){
+            $('.games').hide();
+            $('#' + $(this).val()).show();
+        });
+    });
     
-    
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbxYlF4RDJi7QizivPKUPEWCJquc_zOsH1z2irpNJXJxgwtJ7y7t/exec'
-  const form = document.forms['submit-to-google-sheet']
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxYlF4RDJi7QizivPKUPEWCJquc_zOsH1z2irpNJXJxgwtJ7y7t/exec'
+    const form = document.forms['submit-to-google-sheet']
 
-  form.addEventListener('submit', e => {
-    e.preventDefault()
-    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => console.log('Bananas!', response), form.reset())
-      .catch(error => console.error('Error!', error.message))
-  })
-    
-
+    form.addEventListener('submit', e => {
+        e.preventDefault()
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            .then(response => console.log('Bananas!', response), form.reset())
+            .catch(error => console.error('Error!', error.message))
+    })
 </script>
+    
 </body>
 </html>
